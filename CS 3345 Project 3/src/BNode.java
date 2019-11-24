@@ -12,10 +12,8 @@ public class BNode {
 		
 		numkeys++;
 		for( int i = (numkeys - 1); i >= 0; i-- ) {
-			if(keys[i] == null)
-				continue;
-			else {
-				if(key < this.keys[i])
+			if(keys[i] != null) {
+				if(key < keys[i])
 					keys[i+1] = keys[i];
 				else { 
 					keys[i+1] = key;
@@ -35,16 +33,16 @@ public class BNode {
 	}
 	
 	BNode disconnectchild( int index ) {
-		BNode temp = children[index];
+		BNode tempNode = children[index];
 		children[index] = null;
-		return temp;
+		return tempNode;
 	}
 	
 	Integer simpleremovekey() {
-		Integer temp = keys[numkeys-1];
+		Integer tempNode = keys[numkeys-1];
 		keys[numkeys-1] = null;
 		numkeys--;
-		return temp;
+		return tempNode;
 	}
 	
 	Integer simplefindakey(Integer key) {
@@ -65,24 +63,9 @@ public class BNode {
 				removekey2(index);
 		}
 		else {
-			if (children[0] == null) {
-				System.out.println("Error: Key does not exist in the tree");
-				return;
-			}
-			Boolean keyexists;
-			
-			if(index==numkeys)
-				keyexists=true;
-			else
-				keyexists=false;
-			
-			System.out.println("value of keyexists: " + keyexists);		
 			if (children[index].numkeys < 2)
-				fill(index);
+				fillNode(index);
 			
-			if (keyexists && (index > numkeys))
-				children[index-1].removekey(key);
-			else
 				children[index].removekey(key);
 		}
 	}
@@ -129,7 +112,7 @@ public class BNode {
 		}
 		else
 		{
-			merge(index);
+			combineNodes(index);
 			children[index].removekey(key);
 		}
 		System.out.println("Node after removal: ");
@@ -157,27 +140,24 @@ public class BNode {
 		return node.keys[node.numkeys-1];
 	}
 	
-	void merge ( int index ) {
-		System.out.println("merge called");
+	void combineNodes ( int index ) {
+		System.out.println("combineNodes called");
 		BNode childnode = children[index];
 		BNode siblingnode = children[index+1];
+		childnode.keys[1] = keys[index];
 		
-		System.out.println("Node before merge: ");
+		System.out.println("Node before combining: ");
 		for(int i=0; i<numkeys; i++) {
 			if(keys[i] != null)
 				System.out.print(" [" + keys[i] + "] ");
 		}
 		System.out.print('\n');
-		System.out.println("childnode.keys[1]: " + childnode.keys[1]);
-		System.out.println("keys[index]: " + keys[index]);
-		childnode.keys[1] = keys[index];
-		
 		for (int i=0; i<siblingnode.numkeys; i++)
-			childnode.keys[i+2] = siblingnode.keys[i];
+			childnode.keys[2+i] = siblingnode.keys[i];
 		
 		if (childnode.children[0] != null) {
 			for(int i=0; i<=siblingnode.numkeys; i++)
-				childnode.children[i+2] = siblingnode.children[i];
+				childnode.children[2+i] = siblingnode.children[i];
 		}
 		
 		for (int i=(index+1); i < numkeys; i++)
@@ -188,7 +168,7 @@ public class BNode {
 		
 		childnode.numkeys += (siblingnode.numkeys + 1);
 		numkeys--;
-		System.out.println("Node after merge: ");
+		System.out.println("Node after combining: ");
 		for(int i=0; i<numkeys; i++) {
 			if(keys[i] != null)
 				System.out.print(" [" + keys[i] + "] ");
@@ -196,10 +176,10 @@ public class BNode {
 		System.out.print('\n');
 	}
 	
-	void borrowkeyfromparent(int index) {
+	void takekeyfromparent(int index) {
 		BNode childnode = children[index];
 		BNode siblingnode = children[index-1];
-		System.out.println("borrowfromparent called");
+		System.out.println("takekeyfromparent called");
 		for (int i=(childnode.numkeys-1); i>=0; i--)
 			childnode.keys[i+1] = childnode.keys[i];
 		
@@ -219,39 +199,37 @@ public class BNode {
 		siblingnode.numkeys--;
 	}
 	
-	void borrowkeyfromchild (int index) {
+	void takekeyfromchild (int index) {
 		BNode childnode = children[index];
 		BNode siblingnode = children[index+1];
-		System.out.println("borrowfromchild called");
+		System.out.println("takekeyfromchild called");
 		childnode.keys[childnode.numkeys] = keys[index];
+		keys[index] = siblingnode.keys[0];
 		
 		if (childnode.children[0] != null)
 			childnode.children[childnode.numkeys+1] = siblingnode.children[0];
 		
-		keys[index] = siblingnode.keys[0];
-		
 		for (int i=1; i<siblingnode.numkeys; i++)
 			siblingnode.keys[i-1] = siblingnode.keys[i];
 		
-		if (siblingnode.children[0] != null) {
+		if (siblingnode.children[0] != null) 
 			for(int i=1; i<=siblingnode.numkeys; i++)
 				siblingnode.children[i-1] = siblingnode.children[i];
-		}
 		
 		childnode.numkeys++;
 		siblingnode.numkeys--;
 	}
 	
-	void fill (int index) {
+	void fillNode (int index) {
 		if((index != 0) && (children[index-1].numkeys >= 2))
-			borrowkeyfromparent(index);
+			takekeyfromparent(index);
 		else if ((index != numkeys) && (children[index+1].numkeys >= 2))
-			borrowkeyfromchild(index);
+			takekeyfromchild(index);
 		else {
 			if (index != numkeys)
-				merge(index);
+				combineNodes(index);
 			else
-				merge(index-1);
+				combineNodes(index-1);
 		}
 	}
 	

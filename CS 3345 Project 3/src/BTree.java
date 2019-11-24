@@ -14,7 +14,6 @@ public class BTree {
 	void insertNode (Integer key) {
 		
 		BNode node = root;
-		Integer temp = key;
 		
 		while(true) {
 			if(node.numkeys == 3) {
@@ -28,7 +27,7 @@ public class BTree {
 			else
 				node = getnextchild(node, key);
 		}
-		node.insertkeysintonode(temp);
+		node.insertkeysintonode(key);
 	}
 	
 	void split(BNode node) {
@@ -52,7 +51,6 @@ public class BTree {
 		
 		itemIndex = parent.insertkeysintonode(tempkey1);
 		
-		
 		for(int i=(parent.numkeys-1); i > itemIndex; i--) {
 			BNode temp = parent.disconnectchild(i);
 			parent.connectchild(temp, (i+1));
@@ -73,9 +71,9 @@ public class BTree {
 		return node.children[i];
 	}
 	
-	void showTree() { recursivelyshowTree( root, 0, 0); }
+	void showTree() { startfromroot( root, 0, 0); }
 	
-	void recursivelyshowTree(BNode node, int level, int childnum) {
+	void startfromroot(BNode node, int level, int childnum) {
 		
 		if( level == 0 )
 			System.out.print("Root ");
@@ -94,18 +92,13 @@ public class BTree {
 		for(int i=0; i < (node.numkeys + 1); i++) {
 			BNode nextNode = node.children[i];
 			if(nextNode != null)
-				recursivelyshowTree(nextNode, (level + 1), i);
+				startfromroot(nextNode, (level + 1), i);
 			else
 				return;
 		}
 	}
 	
 	void removeakey(Integer key) {
-		if(root == null) {
-			System.out.println("Error: Tree is empty...");
-			return;
-		}
-		
 		root.removekey(key);
 		
 		if (root.numkeys==0) {

@@ -32,36 +32,36 @@ public class BTree {
 	}
 	
 	void split(BNode node) {
-		Integer itemB, itemC;
-		BNode parent, child2, child3;
+		Integer tempkey1, tempkey2;
+		BNode parent, firstchild, secondchild;
 		int itemIndex;
-		BNode newRight = new BNode();
+		BNode rightsidenode = new BNode();
 		
-		itemC = node.simpleremovekey();
-		itemB = node.simpleremovekey();
-		child2 = node.disconnectchild(2);
-		child3 = node.disconnectchild(3);
+		tempkey2 = node.simpleremovekey();
+		tempkey1 = node.simpleremovekey();
+		firstchild = node.disconnectchild(2);
+		secondchild = node.disconnectchild(3);
 		
 		if(node == root) {
 			root = new BNode();
 			parent = root;
-			root.connectchild(0, node);
+			root.connectchild(node, 0);
 		}
 		else
 			parent = node.parentnode;
 		
-		itemIndex = parent.insertkeysintonode(itemB);
-		int n = parent.numkeys;
+		itemIndex = parent.insertkeysintonode(tempkey1);
 		
-		for(int i=n-1; i>itemIndex; i--) {
+		
+		for(int i=(parent.numkeys-1); i > itemIndex; i--) {
 			BNode temp = parent.disconnectchild(i);
-			parent.connectchild(i+1, temp);
+			parent.connectchild(temp, (i+1));
 		}
-		parent.connectchild(itemIndex+1, newRight);
+		parent.connectchild(rightsidenode,itemIndex+1);
 		
-		newRight.insertkeysintonode(itemC);
-		newRight.connectchild(0, child2);
-		newRight.connectchild(1, child3);
+		rightsidenode.insertkeysintonode(tempkey2);
+		rightsidenode.connectchild(firstchild,0);
+		rightsidenode.connectchild(secondchild,1);
 	}
 	
 	BNode getnextchild(BNode node, Integer key) {
@@ -83,8 +83,9 @@ public class BTree {
 			System.out.println("Level: " + level + " Child: " + childnum + " ");
 			System.out.println("Parent's Left-Most Key: " + node.parentnode.keys[0]);
 		}
-		System.out.print("Keys:");
-		for(int i=0; i<node.keys.length; i++) {
+		System.out.println("Number of keys: " + node.numkeys);
+		System.out.print("Key(s):");
+		for(int i=0; i<node.numkeys; i++) {
 			if(node.keys[i] != null)
 				System.out.print(" [" + node.keys[i] + "] ");
 		}
@@ -96,6 +97,22 @@ public class BTree {
 				recursivelyshowTree(nextNode, (level + 1), i);
 			else
 				return;
+		}
+	}
+	
+	void removeakey(Integer key) {
+		if(root == null) {
+			System.out.println("Error: Tree is empty...");
+			return;
+		}
+		
+		root.removekey(key);
+		
+		if (root.numkeys==0) {
+			if (root.children[0] == null)
+				root = null;
+			else
+				root = root.children[0];
 		}
 	}
 }

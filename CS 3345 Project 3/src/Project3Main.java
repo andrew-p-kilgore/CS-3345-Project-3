@@ -28,6 +28,17 @@ public class Project3Main {
 		tree.insertNode(45);
 		
 		tree.showTree();
+		tree.removeakey(3);
+		tree.removeakey(17);
+		tree.removeakey(55);
+		tree.removeakey(1);
+		tree.removeakey(52);
+		tree.removeakey(48);
+		tree.removeakey(2);
+		tree.removeakey(14);
+		tree.removeakey(25);
+		
+		tree.showTree();
 		
 	}
 

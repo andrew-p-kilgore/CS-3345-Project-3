@@ -28,15 +28,15 @@ public class BNode {
 		return 0;
 	}
 	
-	void connectchild( int num, BNode child) {
-		children[num] = child;
+	void connectchild( BNode child , int index ) {
+		children[index] = child;
 		if(child != null)
 			child.parentnode = this;
 	}
 	
-	BNode disconnectchild( int num ) {
-		BNode temp = children[num];
-		children[num] = null;
+	BNode disconnectchild( int index ) {
+		BNode temp = children[index];
+		children[index] = null;
 		return temp;
 	}
 	
@@ -47,28 +47,103 @@ public class BNode {
 		return temp;
 	}
 	
-	Integer findakey(int key) {
+	Integer simplefindakey(Integer key) {
 		int index = 0;
-		while ( index < numkeys && keys [index] < key)
+		while ( (index < numkeys) && (keys [index] < key))
 			index++;
 		
 		return index;
 	}
 	
-	void removekey (int key) {}
+	void removekey (Integer key) {
+		int index = simplefindakey(key);
+		
+		if ( (index < numkeys) && (keys[index] == key) ) {
+			if (children[0] == null)
+				removekey1(index);
+			else
+				removekey2(index);
+		}
+		else {
+			if (children[0] == null) {
+				System.out.println("Error: Key does not exist in the tree");
+				return;
+			}
+			Boolean keyexists;
+			
+			if(index==numkeys)
+				keyexists=true;
+			else
+				keyexists=false;
+			
+			System.out.println("value of keyexists: " + keyexists);		
+			if (children[index].numkeys < 2)
+				fill(index);
+			
+			if (keyexists && (index > numkeys))
+				children[index-1].removekey(key);
+			else
+				children[index].removekey(key);
+		}
+	}
 	
 	void removekey1 (int index) {
+		System.out.println("removekey1 called");
+		System.out.println("Node before removal: ");
+		for(int i=0; i<numkeys; i++) {
+			if(keys[i] != null)
+				System.out.print(" [" + keys[i] + "] ");
+		}
+		System.out.print('\n');
 		for (int i=(index + 1); i<numkeys; i++)
 			keys[i-1] = keys[i];
 		
 		numkeys--;
+		System.out.println("Node after removal: ");
+		for(int i=0; i<numkeys; i++) {
+			if(keys[i] != null)
+				System.out.print(" [" + keys[i] + "] ");
+		}
+		System.out.print('\n');
 	}
 	
-	void removekey2 (int index) {}
+	void removekey2 (int index) {
+		System.out.println("removekey2 called");
+		System.out.println("Node before removal: ");
+		for(int i=0; i<numkeys; i++) {
+			if(keys[i] != null)
+				System.out.print(" [" + keys[i] + "] ");
+		}
+		System.out.print('\n');
+		Integer key = keys[index];
+		
+		if (children[index].numkeys >= 2) {
+			Integer parent = getParent(index);
+			keys[index] = parent;
+			children[index].removekey(parent);
+		}
+		else if (children[index+1].numkeys >= 2) {
+			Integer child = getChild(index);
+			keys[index] = child;
+			children[index+1].removekey(child);
+		}
+		else
+		{
+			merge(index);
+			children[index].removekey(key);
+		}
+		System.out.println("Node after removal: ");
+		for(int i=0; i<numkeys; i++) {
+			if(keys[i] != null)
+				System.out.print(" [" + keys[i] + "] ");
+		}
+		System.out.print('\n');
+		
+	}
 	
 	Integer getChild (int index) {
 		BNode node = children [index + 1];
-		while (node.children[0] == null)
+		while (node.children[0] != null)
 			node = node.children[0];
 		
 		return node.keys[0];
@@ -76,16 +151,25 @@ public class BNode {
 	
 	Integer getParent (int index) {
 		BNode node = children [index];
-		while (node.children[0] == null)
+		while (node.children[0] != null)
 			node = node.children[node.numkeys];
 		
 		return node.keys[node.numkeys-1];
 	}
 	
 	void merge ( int index ) {
+		System.out.println("merge called");
 		BNode childnode = children[index];
-		BNode siblingnode = children[index];
+		BNode siblingnode = children[index+1];
 		
+		System.out.println("Node before merge: ");
+		for(int i=0; i<numkeys; i++) {
+			if(keys[i] != null)
+				System.out.print(" [" + keys[i] + "] ");
+		}
+		System.out.print('\n');
+		System.out.println("childnode.keys[1]: " + childnode.keys[1]);
+		System.out.println("keys[index]: " + keys[index]);
 		childnode.keys[1] = keys[index];
 		
 		for (int i=0; i<siblingnode.numkeys; i++)
@@ -102,14 +186,20 @@ public class BNode {
 		for (int i=(index+2); i <= numkeys; i++)
 			children[i-1] = children[i];
 		
-		childnode.numkeys += siblingnode.numkeys + 1;
+		childnode.numkeys += (siblingnode.numkeys + 1);
 		numkeys--;
+		System.out.println("Node after merge: ");
+		for(int i=0; i<numkeys; i++) {
+			if(keys[i] != null)
+				System.out.print(" [" + keys[i] + "] ");
+		}
+		System.out.print('\n');
 	}
 	
 	void borrowkeyfromparent(int index) {
 		BNode childnode = children[index];
 		BNode siblingnode = children[index-1];
-		
+		System.out.println("borrowfromparent called");
 		for (int i=(childnode.numkeys-1); i>=0; i--)
 			childnode.keys[i+1] = childnode.keys[i];
 		
@@ -129,10 +219,10 @@ public class BNode {
 		siblingnode.numkeys--;
 	}
 	
-	void borrowfromchild (int index) {
+	void borrowkeyfromchild (int index) {
 		BNode childnode = children[index];
 		BNode siblingnode = children[index+1];
-		
+		System.out.println("borrowfromchild called");
 		childnode.keys[childnode.numkeys] = keys[index];
 		
 		if (childnode.children[0] != null)
@@ -151,4 +241,19 @@ public class BNode {
 		childnode.numkeys++;
 		siblingnode.numkeys--;
 	}
+	
+	void fill (int index) {
+		if((index != 0) && (children[index-1].numkeys >= 2))
+			borrowkeyfromparent(index);
+		else if ((index != numkeys) && (children[index+1].numkeys >= 2))
+			borrowkeyfromchild(index);
+		else {
+			if (index != numkeys)
+				merge(index);
+			else
+				merge(index-1);
+		}
+	}
+	
+	
 }

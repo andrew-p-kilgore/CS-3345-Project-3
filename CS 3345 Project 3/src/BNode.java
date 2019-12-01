@@ -193,9 +193,10 @@ public class BNode {
 		if(childnode.children[0] != null)
 			childnode.children[0] = siblingnode.children[siblingnode.numkeys];
 		
-		keys[index-1] = siblingnode.keys[siblingnode.numkeys-1];
-		
 		childnode.numkeys++;
+		
+		keys[index-1] = siblingnode.keys[siblingnode.numkeys-1];
+
 		siblingnode.numkeys--;
 	}
 	

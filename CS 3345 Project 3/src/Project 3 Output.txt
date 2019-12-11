@@ -1,0 +1,173 @@
+Root Number of keys: 2
+Key(s): [8]  [25] 
+
+Level: 1 Child: 0 
+Parent's Left-Most Key: 8
+Number of keys: 1
+Key(s): [2] 
+
+Level: 2 Child: 0 
+Parent's Left-Most Key: 2
+Number of keys: 1
+Key(s): [1] 
+
+Level: 2 Child: 1 
+Parent's Left-Most Key: 2
+Number of keys: 3
+Key(s): [3]  [6]  [7] 
+
+Level: 1 Child: 1 
+Parent's Left-Most Key: 8
+Number of keys: 1
+Key(s): [14] 
+
+Level: 2 Child: 0 
+Parent's Left-Most Key: 14
+Number of keys: 1
+Key(s): [12] 
+
+Level: 2 Child: 1 
+Parent's Left-Most Key: 14
+Number of keys: 2
+Key(s): [16]  [17] 
+
+Level: 1 Child: 2 
+Parent's Left-Most Key: 8
+Number of keys: 3
+Key(s): [28]  [48]  [53] 
+
+Level: 2 Child: 0 
+Parent's Left-Most Key: 28
+Number of keys: 1
+Key(s): [26] 
+
+Level: 2 Child: 1 
+Parent's Left-Most Key: 28
+Number of keys: 2
+Key(s): [29]  [45] 
+
+Level: 2 Child: 2 
+Parent's Left-Most Key: 28
+Number of keys: 1
+Key(s): [52] 
+
+Level: 2 Child: 3 
+Parent's Left-Most Key: 28
+Number of keys: 2
+Key(s): [55]  [68] 
+
+combineNodes called
+Node before combining: 
+ [8]  [25] 
+Node after combining: 
+ [25] 
+removekey1 called
+Node before removal: 
+ [3]  [6]  [7] 
+Node after removal: 
+ [6]  [7] 
+removekey1 called
+Node before removal: 
+ [16]  [17] 
+Node after removal: 
+ [16] 
+removekey1 called
+Node before removal: 
+ [55]  [68] 
+Node after removal: 
+ [68] 
+takekeyfromchild called
+removekey1 called
+Node before removal: 
+ [1]  [2] 
+Node after removal: 
+ [2] 
+takekeyfromparent called
+removekey1 called
+Node before removal: 
+ [48]  [52] 
+Node after removal: 
+ [48] 
+combineNodes called
+Node before combining: 
+ [28]  [45]  [53] 
+Node after combining: 
+ [28]  [45] 
+removekey1 called
+Node before removal: 
+ [48]  [53]  [68] 
+Node after removal: 
+ [53]  [68] 
+combineNodes called
+Node before combining: 
+ [6]  [8]  [14] 
+Node after combining: 
+ [8]  [14] 
+removekey1 called
+Node before removal: 
+ [2]  [6]  [7] 
+Node after removal: 
+ [6]  [7] 
+removekey2 called
+Node before removal: 
+ [8]  [14] 
+combineNodes called
+Node before combining: 
+ [8]  [14] 
+Node after combining: 
+ [8] 
+removekey1 called
+Node before removal: 
+ [12]  [14]  [16] 
+Node after removal: 
+ [12]  [16] 
+Node after removal: 
+ [8] 
+removekey2 called
+Node before removal: 
+ [25] 
+combineNodes called
+Node before combining: 
+ [28]  [45] 
+Node after combining: 
+ [45] 
+removekey1 called
+Node before removal: 
+ [26]  [28]  [29] 
+Node after removal: 
+ [28]  [29] 
+Node after removal: 
+ [26] 
+Root Number of keys: 1
+Key(s): [26] 
+
+Level: 1 Child: 0 
+Parent's Left-Most Key: 26
+Number of keys: 1
+Key(s): [8] 
+
+Level: 2 Child: 0 
+Parent's Left-Most Key: 8
+Number of keys: 2
+Key(s): [6]  [7] 
+
+Level: 2 Child: 1 
+Parent's Left-Most Key: 14
+Number of keys: 2
+Key(s): [12]  [16] 
+
+Level: 1 Child: 1 
+Parent's Left-Most Key: 26
+Number of keys: 1
+Key(s): [45] 
+
+Level: 2 Child: 0 
+Parent's Left-Most Key: 45
+Number of keys: 2
+Key(s): [28]  [29] 
+
+Level: 2 Child: 1 
+Parent's Left-Most Key: 45
+Number of keys: 2
+Key(s): [53]  [68] 
+

@@ -1,9 +1,6 @@
 public class BTree {
 
 	BNode root = new BNode();
-	int maxdegree = 4;
-	int height;
-	int numkeys;
 	
 	BTree () {}
 	
@@ -31,15 +28,13 @@ public class BTree {
 	}
 	
 	void split(BNode node) {
-		Integer tempkey1, tempkey2;
-		BNode parent, firstchild, secondchild;
-		int itemIndex;
-		BNode rightsidenode = new BNode();
 		
-		tempkey2 = node.simpleremovekey();
-		tempkey1 = node.simpleremovekey();
-		firstchild = node.disconnectchild(2);
-		secondchild = node.disconnectchild(3);
+		BNode parent;
+		BNode rightsidenode = new BNode();
+		Integer tempkey2 = node.simpleremovekey();
+		Integer tempkey1 = node.simpleremovekey();
+		BNode firstchild = node.disconnectchild(2);
+		BNode secondchild = node.disconnectchild(3);
 		
 		if(node == root) {
 			root = new BNode();
@@ -49,7 +44,7 @@ public class BTree {
 		else
 			parent = node.parentnode;
 		
-		itemIndex = parent.insertkeysintonode(tempkey1);
+		int itemIndex = parent.insertkeysintonode(tempkey1);
 		
 		for(int i=(parent.numkeys-1); i > itemIndex; i--) {
 			BNode temp = parent.disconnectchild(i);
@@ -64,7 +59,7 @@ public class BTree {
 	
 	BNode getnextchild(BNode node, Integer key) {
 		int i;
-		for(i=0; i<node.numkeys; i++) {
+		for(i=0; i < node.numkeys; i++) {
 			if( key < node.keys[i] )
 				return node.children[i];
 		}

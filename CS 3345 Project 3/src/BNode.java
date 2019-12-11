@@ -3,7 +3,7 @@ public class BNode {
 	Integer[] keys = new Integer [3];
 	int numkeys = 0;
 	BNode[] children = new BNode [4];
-	//int numchildren = 0;
+	int numchildren = 0;
 	BNode parentnode;
 	
 	BNode () {}
@@ -17,7 +17,7 @@ public class BNode {
 					keys[i+1] = keys[i];
 				else { 
 					keys[i+1] = key;
-					return i+1;
+					return (i+1);
 				}
 			}
 		}
@@ -45,28 +45,31 @@ public class BNode {
 		return tempNode;
 	}
 	
-	Integer simplefindakey(Integer key) {
-		int index = 0;
-		while ( (index < numkeys) && (keys [index] < key))
-			index++;
-		
-		return index;
+	Integer getkeyindex(Integer key) {
+		Integer i;
+		for(i = 0; i < numkeys; i++) {
+			if(keys[i] < key)
+				continue;
+			else
+				return i;
+		}
+		return i;
 	}
 	
 	void removekey (Integer key) {
-		int index = simplefindakey(key);
+		int keyindex = getkeyindex(key);
 		
-		if ( (index < numkeys) && (keys[index] == key) ) {
+		if ( (keyindex < numkeys) && (keys[keyindex] == key) ) {
 			if (children[0] == null)
-				removekey1(index);
+				removekey1(keyindex);
 			else
-				removekey2(index);
+				removekey2(keyindex);
 		}
 		else {
-			if (children[index].numkeys < 2)
-				fillNode(index);
+			if (children[keyindex].numkeys < 2)
+				fillNode(keyindex);
 			
-				children[index].removekey(key);
+				children[keyindex].removekey(key);
 		}
 	}
 	
@@ -100,12 +103,12 @@ public class BNode {
 		System.out.print('\n');
 		Integer key = keys[index];
 		
-		if (children[index].numkeys >= 2) {
+		if (children[index].numkeys > 1) {
 			Integer parent = getParent(index);
 			keys[index] = parent;
 			children[index].removekey(parent);
 		}
-		else if (children[index+1].numkeys >= 2) {
+		else if (children[index+1].numkeys > 1) {
 			Integer child = getChild(index);
 			keys[index] = child;
 			children[index+1].removekey(child);
@@ -153,11 +156,11 @@ public class BNode {
 		}
 		System.out.print('\n');
 		for (int i=0; i<siblingnode.numkeys; i++)
-			childnode.keys[2+i] = siblingnode.keys[i];
+			childnode.keys[i+2] = siblingnode.keys[i];
 		
 		if (childnode.children[0] != null) {
 			for(int i=0; i<=siblingnode.numkeys; i++)
-				childnode.children[2+i] = siblingnode.children[i];
+				childnode.children[i+2] = siblingnode.children[i];
 		}
 		
 		for (int i=(index+1); i < numkeys; i++)
